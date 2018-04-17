@@ -22,7 +22,7 @@ import subprocess
 Naniwazu = 'C:\難波津いなばくん'
 readlist = os.path.join(Naniwazu, 'readlist.txt')
 WMPLAYER = "C:/Program Files/Windows Media Player/wmplayer.exe"
-DATADIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), "data")
+DATADIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), "naniwazu_data")
 
 class Yomiage(QtCore.QThread):
 
