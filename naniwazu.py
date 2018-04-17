@@ -45,17 +45,18 @@ class Yomiage(QtCore.QThread):
         random.seed()
         random.shuffle(selected)
 
+        self.stopped = False
         play(self.kamiNoKuFile('0'), self.KAMITIME + self.SIMOTIME)
         play(self.simoNoKuFile('0'), self.SIMOTIME)
         for item in selected:
             cardNo = item.text().lstrip()
+            if self.stopped:
+                break
             play(self.kamiNoKuFile(cardNo), self.KAMITIME)
-            if self.stopped:
-                break
             time.sleep(self.MAAI_inside)
-            play(self.simoNoKuFile(cardNo), self.SIMOTIME)
             if self.stopped:
                 break
+            play(self.simoNoKuFile(cardNo), self.SIMOTIME)
             time.sleep(self.MAAI_outside)
         self.stop()
         self.finished.emit()
@@ -95,6 +96,8 @@ class KarutaForm(QWidget):
 
     def initUI(self):
         self.setWindowIcon(QtGui.QIcon(os.path.join(DATADIR, 'picture', 'ogura.ico')))
+        #self.setStyleSheet("background-color:Snow")
+        self.setStyleSheet("background-color:Linen")
         for i in range(10):
             for j in range(10):
                 item = QTableWidgetItem(str(10*i + j + 1).rjust(5))
@@ -102,6 +105,7 @@ class KarutaForm(QWidget):
         self.ui.btnExit.clicked.connect(self.btnExitClicked)
         self.ui.btnStart.clicked.connect(self.start)
         self.ui.btnSave.clicked.connect(self.save)
+        self.ui.karutaTable.itemSelectionChanged.connect(self.setColor)
         self.yomiage.finished.connect(self.finish_yomiage)
 
         selected = self.read()
@@ -151,6 +155,15 @@ class KarutaForm(QWidget):
     def finish_yomiage(self):
         self.yomiage.wait()
         self.ui.btnStart.setEnabled(True)
+
+    def setColor(self):
+        for i in range(self.ui.karutaTable.rowCount()):
+            for j in range(self.ui.karutaTable.columnCount()):
+                item = self.ui.karutaTable.item(i,j)
+                if item.isSelected():
+                    pass
+                else:
+                    item.setBackground(QtGui.QColor(255,255,255))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
