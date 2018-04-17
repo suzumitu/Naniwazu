@@ -96,8 +96,8 @@ class KarutaForm(QWidget):
 
     def initUI(self):
         self.setWindowIcon(QtGui.QIcon(os.path.join(DATADIR, 'picture', 'ogura.ico')))
-        #self.setStyleSheet("background-color:Snow")
-        self.setStyleSheet("background-color:Linen")
+        #self.setStyleSheet("background-color:DarkSeaGreen")
+        self.setStyleSheet("background-color:rgba(143,188,143,0.9)")  # DarkSeaGreen
         for i in range(10):
             for j in range(10):
                 item = QTableWidgetItem(str(10*i + j + 1).rjust(5))
