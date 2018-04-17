@@ -18,6 +18,7 @@ import simpleaudio as sa
 import winsound as ws
 import time
 import subprocess
+import re
 
 WMPLAYER = "C:/Program Files/Windows Media Player/wmplayer.exe"
 DATADIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), "naniwazu_data")
@@ -49,7 +50,7 @@ class Yomiage(QtCore.QThread):
         play(self.kamiNoKuFile('0'), self.KAMITIME + self.SIMOTIME)
         play(self.simoNoKuFile('0'), self.SIMOTIME)
         for item in selected:
-            cardNo = item.text().lstrip()
+            cardNo = re.sub(r'\*(\d+)', r'\1', item.text().lstrip())
             if self.stopped:
                 break
             play(self.kamiNoKuFile(cardNo), self.KAMITIME)
@@ -98,9 +99,11 @@ class KarutaForm(QWidget):
         self.setWindowIcon(QtGui.QIcon(os.path.join(DATADIR, 'picture', 'ogura.ico')))
         #self.setStyleSheet("background-color:DarkSeaGreen")
         self.setStyleSheet("background-color:rgba(143,188,143,0.9)")  # DarkSeaGreen
-        for i in range(10):
-            for j in range(10):
-                item = QTableWidgetItem(str(10*i + j + 1).rjust(5))
+        rowCount = self.ui.karutaTable.rowCount()
+        columnCount =self.ui.karutaTable.columnCount()
+        for i in range(rowCount):
+            for j in range(columnCount):
+                item = QTableWidgetItem(str(columnCount*i + j + 1).rjust(5))
                 self.ui.karutaTable.setItem(i, j, item)
         self.ui.btnExit.clicked.connect(self.btnExitClicked)
         self.ui.btnStart.clicked.connect(self.start)
@@ -138,7 +141,8 @@ class KarutaForm(QWidget):
 
     def select(self, indices):
         for i, j in indices:
-            self.ui.karutaTable.item(i, j).setSelected(True)
+            item = self.ui.karutaTable.item(i, j)
+            item.setSelected(True)
 
     def save(self):
         selected = self.ui.karutaTable.selectedItems()
@@ -146,7 +150,8 @@ class KarutaForm(QWidget):
         random.shuffle(selected)
         with open(readlist, 'wt') as f:
             for item in selected:
-                f.writelines(item.text().lstrip() + '\n')
+                content = re.sub(r'\*(\d+)', r'\1', item.text())
+                f.writelines(content.lstrip() + '\n')
 
     def start(self):
         self.ui.btnStart.setEnabled(False)
@@ -161,8 +166,14 @@ class KarutaForm(QWidget):
             for j in range(self.ui.karutaTable.columnCount()):
                 item = self.ui.karutaTable.item(i,j)
                 if item.isSelected():
-                    pass
+                    content = re.sub(r'\s(\d+)', r'*\1', item.text())
+                    item.setText(content)
+                    item.setForeground(QtGui.QColor(255,0,0))
+                    item.setBackground(QtGui.QColor(255,255,255))
                 else:
+                    content = re.sub(r'\*(\d+)', r' \1', item.text())
+                    item.setText(content)
+                    item.setForeground(QtGui.QColor(0,0,0))
                     item.setBackground(QtGui.QColor(255,255,255))
 
 if __name__ == '__main__':
