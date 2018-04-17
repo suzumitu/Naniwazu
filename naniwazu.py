@@ -27,9 +27,10 @@ class Yomiage(QtCore.QThread):
 
     def __init__(self, ui):
         super().__init__()
-        self.KAMITIME = 10
-        self.SIMOTIME = 12
-        self.MAAI = 2
+        self.KAMITIME = 10        # only used for WMPlayer
+        self.SIMOTIME = 12        # only used for WMPlayer
+        self.MAAI_inside = 2      # interval between kaminoku and simonoku
+        self.MAAI_outside = 3     # interval between two songs
         self.stopped = False
         self.mutex = QtCore.QMutex()
         self.ui = ui
@@ -43,16 +44,19 @@ class Yomiage(QtCore.QThread):
         selected = self.ui.karutaTable.selectedItems()
         random.seed()
         random.shuffle(selected)
+
         play(self.kamiNoKuFile('0'), self.KAMITIME + self.SIMOTIME)
         play(self.simoNoKuFile('0'), self.SIMOTIME)
         for item in selected:
-            if self.stopped:
-                return
             cardNo = item.text().lstrip()
             play(self.kamiNoKuFile(cardNo), self.KAMITIME)
-            time.sleep(self.MAAI)
+            if self.stopped:
+                break
+            time.sleep(self.MAAI_inside)
             play(self.simoNoKuFile(cardNo), self.SIMOTIME)
-            time.sleep(self.MAAI)
+            if self.stopped:
+                break
+            time.sleep(self.MAAI_outside)
         self.stop()
         self.finished.emit()
 
@@ -86,9 +90,8 @@ class KarutaForm(QWidget):
         super().__init__()
         self.ui = karuta_form.Ui_mainForm()
         self.ui.setupUi(self)
-        self.initUI()
-
         self.yomiage = Yomiage(self.ui)
+        self.initUI()
 
     def initUI(self):
         self.setWindowIcon(QtGui.QIcon(os.path.join(DATADIR, 'picture', 'ogura.ico')))
@@ -99,6 +102,7 @@ class KarutaForm(QWidget):
         self.ui.btnExit.clicked.connect(self.btnExitClicked)
         self.ui.btnStart.clicked.connect(self.start)
         self.ui.btnSave.clicked.connect(self.save)
+        self.yomiage.finished.connect(self.finish_yomiage)
 
         selected = self.read()
         indices = self.getIndex(selected)
@@ -141,7 +145,12 @@ class KarutaForm(QWidget):
                 f.writelines(item.text().lstrip() + '\n')
 
     def start(self):
+        self.ui.btnStart.setEnabled(False)
         self.yomiage.start()
+
+    def finish_yomiage(self):
+        self.yomiage.wait()
+        self.ui.btnStart.setEnabled(True)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
