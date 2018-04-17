@@ -19,10 +19,9 @@ import winsound as ws
 import time
 import subprocess
 
-Naniwazu = 'C:\難波津いなばくん'
-readlist = os.path.join(Naniwazu, 'readlist.txt')
 WMPLAYER = "C:/Program Files/Windows Media Player/wmplayer.exe"
 DATADIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), "naniwazu_data")
+readlist = os.path.join(DATADIR, 'readlist.txt')
 
 class Yomiage(QtCore.QThread):
 
