@@ -44,12 +44,12 @@
     <rect>
      <x>40</x>
      <y>30</y>
-     <width>191</width>
+     <width>141</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>歌番号を選んでください</string>
+    <string>    歌番号を選んでください</string>
    </property>
   </widget>
   <widget class="QTableWidget" name="karutaTable">

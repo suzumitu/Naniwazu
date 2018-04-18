@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'karuta.ui'
+# Form implementation generated from reading ui file '.\karuta.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
@@ -19,7 +19,7 @@ class Ui_mainForm(object):
         self.btnExit.setGeometry(QtCore.QRect(360, 500, 75, 23))
         self.btnExit.setObjectName("btnExit")
         self.label = QtWidgets.QLabel(mainForm)
-        self.label.setGeometry(QtCore.QRect(40, 30, 191, 20))
+        self.label.setGeometry(QtCore.QRect(40, 30, 141, 20))
         self.label.setObjectName("label")
         self.karutaTable = QtWidgets.QTableWidget(mainForm)
         self.karutaTable.setGeometry(QtCore.QRect(40, 70, 401, 401))
@@ -50,6 +50,6 @@ class Ui_mainForm(object):
         mainForm.setWindowTitle(_translate("mainForm", "百人一首"))
         self.btnSave.setText(_translate("mainForm", "シャッフル・保存"))
         self.btnExit.setText(_translate("mainForm", "終了"))
-        self.label.setText(_translate("mainForm", "歌番号を選んでください"))
+        self.label.setText(_translate("mainForm", "    歌番号を選んでください"))
         self.btnStart.setText(_translate("mainForm", "開始"))
 
