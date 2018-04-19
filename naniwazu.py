@@ -98,7 +98,15 @@ class KarutaForm(QWidget):
     def initUI(self):
         self.setWindowIcon(QtGui.QIcon(os.path.join(DATADIR, 'picture', 'ogura.ico')))
         #self.setStyleSheet("background-color:DarkSeaGreen")
-        self.setStyleSheet("background-color:rgba(143,188,143,0.9)")  # DarkSeaGreen
+        background_color = "background-color:rgba(143,188,143,0.9)"  # DarkSeaGreen
+        background_color = "QWidget {" + background_color + "}"
+        table_background_color = "QTableWidget {" + background_color + "}"
+        image = os.path.join(DATADIR, 'picture', 'ogura4.jpg')
+        image = re.sub(r'\\','/', image)
+        border_image = "border-image:url(" + image + ")" + " 0 0 0 0 stretch stretch"
+        border_image = "QFrame{" + border_image + "}"
+        spec = background_color + border_image + table_background_color
+        self.setStyleSheet(spec)
         rowCount = self.ui.karutaTable.rowCount()
         columnCount =self.ui.karutaTable.columnCount()
         for i in range(rowCount):
@@ -107,13 +115,15 @@ class KarutaForm(QWidget):
                 self.ui.karutaTable.setItem(i, j, item)
         self.ui.btnExit.clicked.connect(self.btnExitClicked)
         self.ui.btnStart.clicked.connect(self.start)
+        self.ui.btnShow.clicked.connect(self.showTable)
         self.ui.btnSave.clicked.connect(self.save)
-        self.ui.karutaTable.itemSelectionChanged.connect(self.setColor)
+        self.ui.karutaTable.itemSelectionChanged.connect(self.changeItem)
         self.yomiage.finished.connect(self.finish_yomiage)
 
         selected = self.read()
         indices = self.getIndex(selected)
         self.select(indices)
+        self.ui.karutaTable.setVisible(False)
 
     def btnExitClicked(self):
         self.yomiage.stop()
@@ -161,20 +171,22 @@ class KarutaForm(QWidget):
         self.yomiage.wait()
         self.ui.btnStart.setEnabled(True)
 
-    def setColor(self):
+    def showTable(self):
+        if self.ui.karutaTable.isVisible():
+            self.ui.karutaTable.setVisible(False)
+        else:
+            self.ui.karutaTable.setVisible(True)
+
+    def changeItem(self):
         for i in range(self.ui.karutaTable.rowCount()):
             for j in range(self.ui.karutaTable.columnCount()):
                 item = self.ui.karutaTable.item(i,j)
                 if item.isSelected():
                     content = re.sub(r'\s(\d+)', r'*\1', item.text())
                     item.setText(content)
-                    item.setForeground(QtGui.QColor(255,0,0))
-                    item.setBackground(QtGui.QColor(255,255,255))
                 else:
                     content = re.sub(r'\*(\d+)', r' \1', item.text())
                     item.setText(content)
-                    item.setForeground(QtGui.QColor(0,0,0))
-                    item.setBackground(QtGui.QColor(255,255,255))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
