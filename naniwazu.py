@@ -43,13 +43,10 @@ class Yomiage(QtCore.QThread):
     def run(self):
         player = self.ui.cbPlayer.currentText()
         if player == 'WinSound':
-            print("playWinSound")
             play = self.playWinSound
         elif player == 'WMPlayer':
-            print("playWMPlayer")
             play = self.playWmPlayer
         else:
-            print("playSimpleAudio")
             play = self.playSimpleAudio
 
         selected = self.ui.karutaTable.selectedItems()
@@ -125,6 +122,7 @@ class KarutaForm(QWidget):
                 self.ui.karutaTable.setItem(i, j, item)
         self.ui.btnExit.clicked.connect(self.btnExitClicked)
         self.ui.btnStart.clicked.connect(self.start)
+        self.ui.btnStop.clicked.connect(self.stop)
         self.ui.btnShow.clicked.connect(self.showTable)
         self.ui.btnSave.clicked.connect(self.save)
         self.ui.karutaTable.itemSelectionChanged.connect(self.changeItem)
@@ -177,6 +175,12 @@ class KarutaForm(QWidget):
         self.ui.btnStart.setEnabled(False)
         self.ui.cbPlayer.setEnabled(False)
         self.yomiage.start()
+
+    def stop(self):
+        self.yomiage.stop()
+        self.yomiage.wait()
+        self.ui.btnStart.setEnabled(True)
+        self.ui.cbPlayer.setEnabled(True)
 
     def finish_yomiage(self):
         self.yomiage.wait()
