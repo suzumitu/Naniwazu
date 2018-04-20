@@ -107,7 +107,7 @@
   <widget class="QPushButton" name="btnStart">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>10</x>
      <y>620</y>
      <width>75</width>
      <height>23</height>
@@ -120,7 +120,7 @@
   <widget class="QPushButton" name="btnSave">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>90</x>
      <y>620</y>
      <width>71</width>
      <height>23</height>
@@ -133,7 +133,7 @@
   <widget class="QPushButton" name="btnShow">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>160</x>
      <y>620</y>
      <width>71</width>
      <height>23</height>
@@ -146,7 +146,7 @@
   <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>360</x>
      <y>620</y>
      <width>75</width>
      <height>23</height>
@@ -155,6 +155,31 @@
    <property name="text">
     <string>終了</string>
    </property>
+  </widget>
+  <widget class="QComboBox" name="cbPlayer">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>620</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>SimpleAudio</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>WinSound</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>WMPlayer</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <resources/>

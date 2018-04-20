@@ -41,7 +41,17 @@ class Yomiage(QtCore.QThread):
             self.stopped = True
 
     def run(self):
-        play = self.playSimpleAudio
+        player = self.ui.cbPlayer.currentText()
+        if player == 'WinSound':
+            print("playWinSound")
+            play = self.playWinSound
+        elif player == 'WMPlayer':
+            print("playWMPlayer")
+            play = self.playWmPlayer
+        else:
+            print("playSimpleAudio")
+            play = self.playSimpleAudio
+
         selected = self.ui.karutaTable.selectedItems()
         random.seed()
         random.shuffle(selected)
@@ -165,11 +175,13 @@ class KarutaForm(QWidget):
 
     def start(self):
         self.ui.btnStart.setEnabled(False)
+        self.ui.cbPlayer.setEnabled(False)
         self.yomiage.start()
 
     def finish_yomiage(self):
         self.yomiage.wait()
         self.ui.btnStart.setEnabled(True)
+        self.ui.cbPlayer.setEnabled(True)
 
     def showTable(self):
         if self.ui.karutaTable.isVisible():
