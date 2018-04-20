@@ -111,7 +111,7 @@ class KarutaForm(QWidget):
         image = os.path.join(DATADIR, 'picture', 'ogura4.jpg')
         image = re.sub(r'\\','/', image)
         border_image = "border-image:url(" + image + ")" + " 0 0 0 0 stretch stretch"
-        border_image = "QFrame{" + border_image + "}"
+        border_image = "QFrame#frame{" + border_image + "}"
         spec = background_color + border_image + table_background_color
         self.setStyleSheet(spec)
         rowCount = self.ui.karutaTable.rowCount()
